@@ -21,16 +21,18 @@
     THE SOFTWARE.
 */
 
-#include "Wire.h"
-#include "ota.h"
-#include "GlobalVars.h"
-#include "network/network.h"
-#include "globals.h"
-#include "credentials.h"
 #include <i2cscan.h>
-#include "serial/serialcommands.h"
+#include "GlobalVars.h"
+#include "Multiplexer.cpp"
+#include "Multiplexer.h"
+#include "Wire.h"
 #include "batterymonitor.h"
+#include "credentials.h"
+#include "globals.h"
 #include "logging/Logger.h"
+#include "network/network.h"
+#include "ota.h"
+#include "serial/serialcommands.h"
 
 SlimeVR::Logging::Logger logger("SlimeVR");
 SlimeVR::Sensors::SensorManager sensorManager;
@@ -94,7 +96,7 @@ void setup()
 
     // Wait for IMU to boot
     delay(500);
-    
+    Multiplexer::setup();
     sensorManager.setup();
     
     Network::setUp();

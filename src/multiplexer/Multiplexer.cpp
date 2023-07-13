@@ -14,7 +14,7 @@
 
 void Multiplexer::setup()
 {
-    Wire.begin();
+    // Wire.begin();
     setTCAChannel(TCA9548A_CHANNEL_0);
 }
 

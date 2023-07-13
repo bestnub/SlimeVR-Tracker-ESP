@@ -13,3 +13,4 @@ namespace Multiplexer
      */
     void setTCAChannel(byte i);
 }
+#endif
