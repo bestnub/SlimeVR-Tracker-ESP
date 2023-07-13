@@ -115,65 +115,58 @@ void BNO080Sensor::motionLoop()
         lastData = millis();
 
 #if USE_6_AXIS
-        if (imu.hasNewGameQuat())
+        if (imu.hasNewGameQuat()) // New quaternion if context
         {
-            imu.getGameQuat(quaternion.x, quaternion.y, quaternion.z, quaternion.w, calibrationAccuracy);
-            quaternion *= sensorOffset;
-    #if SEND_ACCELERATION
+            imu.getGameQuat(fusedRotation.x, fusedRotation.y, fusedRotation.z, fusedRotation.w, calibrationAccuracy);
+            fusedRotation *= sensorOffset;
+
+            if (ENABLE_INSPECTION || !OPTIMIZE_UPDATES || !lastFusedRotationSent.equalsWithEpsilon(fusedRotation))
+            {
+                newFusedRotation = true;
+                lastFusedRotationSent = fusedRotation;
+            }
+            // Leave new quaternion if context open, it's closed later
+
+#else // USE_6_AXIS
+
+        if (imu.hasNewQuat()) // New quaternion if context
+        {
+            imu.getQuat(fusedRotation.x, fusedRotation.y, fusedRotation.z, fusedRotation.w, magneticAccuracyEstimate, calibrationAccuracy);
+            fusedRotation *= sensorOffset;
+
+            if (ENABLE_INSPECTION || !OPTIMIZE_UPDATES || !lastFusedRotationSent.equalsWithEpsilon(fusedRotation))
+            {
+                newFusedRotation = true;
+                lastFusedRotationSent = fusedRotation;
+            }
+            // Leave new quaternion if context open, it's closed later
+#endif // USE_6_AXIS
+
+            // Continuation of the new quaternion if context, used for both 6 and 9 axis
+#if SEND_ACCELERATION
             {
                 uint8_t acc;
                 this->imu.getLinAccel(this->acceleration[0], this->acceleration[1], this->acceleration[2], acc);
+                this->newAcceleration = true;
             }
-    #endif // SEND_ACCELERATION
+#endif // SEND_ACCELERATION
+        } // Closing new quaternion if context
 
-    #if ENABLE_INSPECTION
-            {
-                Network::sendInspectionFusedIMUData(sensorId, quaternion);
-            }
-    #endif // ENABLE_INSPECTION
-
-            if (!OPTIMIZE_UPDATES || !lastQuatSent.equalsWithEpsilon(quaternion))
-            {
-                newData = true;
-                lastQuatSent = quaternion;
-            }
-        }
-
-    #if BNO_USE_MAGNETOMETER_CORRECTION
+#if USE_6_AXIS && BNO_USE_MAGNETOMETER_CORRECTION
         if (imu.hasNewMagQuat())
         {
             imu.getMagQuat(magQuaternion.x, magQuaternion.y, magQuaternion.z, magQuaternion.w, magneticAccuracyEstimate, magCalibrationAccuracy);
             magQuaternion *= sensorOffset;
 
-        #if ENABLE_INSPECTION
+    #if ENABLE_INSPECTION
             {
                 Network::sendInspectionCorrectionData(sensorId, quaternion);
             }
-        #endif // ENABLE_INSPECTION
+    #endif // ENABLE_INSPECTION
 
             newMagData = true;
         }
-    #endif // BNO_USE_MAGNETOMETER_CORRECTION
-#else // USE_6_AXIS
-
-        if (imu.hasNewQuat())
-        {
-            imu.getQuat(quaternion.x, quaternion.y, quaternion.z, quaternion.w, magneticAccuracyEstimate, calibrationAccuracy);
-            quaternion *= sensorOffset;
-
-    #if ENABLE_INSPECTION
-            {
-                Network::sendInspectionFusedIMUData(sensorId, quaternion);
-            }
-    #endif // ENABLE_INSPECTION
-
-            if (!OPTIMIZE_UPDATES || !lastQuatSent.equalsWithEpsilon(quaternion))
-            {
-                newData = true;
-                lastQuatSent = quaternion;
-            }
-        }
-#endif // USE_6_AXIS
+#endif // USE_6_AXIS && BNO_USE_MAGNETOMETER_CORRECTION
 
         if (imu.getTapDetected())
         {
@@ -213,23 +206,27 @@ uint8_t BNO080Sensor::getSensorState() {
 
 void BNO080Sensor::sendData()
 {
-    if (newData)
+    if (newFusedRotation)
     {
-        newData = false;
-        Network::sendRotationData(&quaternion, DATA_TYPE_NORMAL, calibrationAccuracy, sensorId);
+        newFusedRotation = false;
+        Network::sendRotationData(&fusedRotation, DATA_TYPE_NORMAL, calibrationAccuracy, sensorId);
+
+#ifdef DEBUG_SENSOR
+        m_Logger.trace("Quaternion: %f, %f, %f, %f", UNPACK_QUATERNION(fusedRotation));
+#endif
+    }
 
 #if SEND_ACCELERATION
+    if(newAcceleration)
+    {
+        newAcceleration = false;
         Network::sendAccel(this->acceleration, this->sensorId);
+    }
 #endif
 
 #if !USE_6_AXIS
         Network::sendMagnetometerAccuracy(magneticAccuracyEstimate, sensorId);
 #endif
-
-#ifdef DEBUG_SENSOR
-        m_Logger.trace("Quaternion: %f, %f, %f, %f", UNPACK_QUATERNION(quaternion));
-#endif
-    }
 
 #if USE_6_AXIS && BNO_USE_MAGNETOMETER_CORRECTION
     if (newMagData)
@@ -249,18 +246,7 @@ void BNO080Sensor::sendData()
 
 void BNO080Sensor::startCalibration(int calibrationType)
 {
-    // TODO It only calibrates gyro, it should have multiple calibration modes, and check calibration status in motionLoop()
-    ledManager.pattern(20, 20, 10);
-    ledManager.blink(2000);
-    imu.calibrateGyro();
-    do
-    {
-        ledManager.on();
-        imu.requestCalibrationStatus();
-        delay(20);
-        imu.getReadings();
-        ledManager.off();
-        delay(20);
-    } while (!imu.calibrationComplete());
-    imu.saveCalibration();
+    // BNO does automatic calibration,
+    // it's always enabled except accelerometer
+    // that is disabled 30 seconds after startup
 }

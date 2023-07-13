@@ -34,6 +34,7 @@
 #include "consts.h"
 #include "Multiplexer.h"
 #include "Multiplexer.cpp"
+#include "sensoraddresses.h"
 
 namespace SlimeVR
 {
@@ -53,6 +54,7 @@ namespace SlimeVR
             uint8_t n10IMUAddress = 0;
             uint8_t n11IMUAddress = 0;
 
+            bool sharedIMUAddresses = (PRIMARY_IMU_ADDRESS_ONE == SECONDARY_IMU_ADDRESS_ONE && PRIMARY_IMU_ADDRESS_TWO == SECONDARY_IMU_ADDRESS_TWO);
             {
                 Multiplexer::setTCAChannel(0);
 #if IMU == IMU_BNO080 || IMU == IMU_BNO085 || IMU == IMU_BNO086
@@ -67,24 +69,24 @@ namespace SlimeVR
 
                 if (!I2CSCAN::isI2CExist(firstIMUAddress))
                 {
-                    m_Sensor1 = new ErroneousSensor(0, IMU);
+                    m_Sensor1 = new ErroneousSensor(sensorID, IMU);
                 }
                 else
                 {
                     m_Logger.trace("Primary IMU found at address 0x%02X", firstIMUAddress);
 
 #if IMU == IMU_BNO080 || IMU == IMU_BNO085 || IMU == IMU_BNO086
-                    m_Sensor1 = new BNO080Sensor(0, IMU, firstIMUAddress, IMU_ROTATION, PIN_IMU_INT);
+                    m_Sensor1 = new BNO080Sensor(sensorID, IMU, firstIMUAddress, IMU_ROTATION, PIN_IMU_INT);
 #elif IMU == IMU_BNO055
-                    m_Sensor1 = new BNO055Sensor(0, firstIMUAddress, IMU_ROTATION);
+                    m_Sensor1 = new BNO055Sensor(sensorID, firstIMUAddress, IMU_ROTATION);
 #elif IMU == IMU_MPU9250
-                    m_Sensor1 = new MPU9250Sensor(0, firstIMUAddress, IMU_ROTATION);
+                    m_Sensor1 = new MPU9250Sensor(sensorID, firstIMUAddress, IMU_ROTATION);
 #elif IMU == IMU_BMI160
-                    m_Sensor1 = new BMI160Sensor(0, firstIMUAddress, IMU_ROTATION);
+                    m_Sensor1 = new BMI160Sensor(sensorID, firstIMUAddress, IMU_ROTATION);
 #elif IMU == IMU_MPU6500 || IMU == IMU_MPU6050
-                    m_Sensor1 = new MPU6050Sensor(0, IMU, firstIMUAddress, IMU_ROTATION);
+                    m_Sensor1 = new MPU6050Sensor(sensorID, IMU, firstIMUAddress, IMU_ROTATION);
 #elif IMU == IMU_ICM20948
-                    m_Sensor1 = new ICM20948Sensor(0, firstIMUAddress, IMU_ROTATION);
+                    m_Sensor1 = new ICM20948Sensor(sensorID, firstIMUAddress, IMU_ROTATION);
 #endif
                 }
 
@@ -108,24 +110,24 @@ namespace SlimeVR
                 }
                 else if (!I2CSCAN::isI2CExist(secondIMUAddress))
                 {
-                    m_Sensor2 = new ErroneousSensor(1, SECOND_IMU);
+                    m_Sensor2 = new ErroneousSensor(sensorID, SECOND_IMU);
                 }
                 else
                 {
                     m_Logger.trace("Secondary IMU found at address 0x%02X", secondIMUAddress);
 
 #if SECOND_IMU == IMU_BNO080 || SECOND_IMU == IMU_BNO085 || SECOND_IMU == IMU_BNO086
-                    m_Sensor2 = new BNO080Sensor(1, SECOND_IMU, secondIMUAddress, SECOND_IMU_ROTATION, PIN_IMU_INT_2);
+                    m_Sensor2 = new BNO080Sensor(sensorID, SECOND_IMU, secondIMUAddress, SECOND_IMU_ROTATION, PIN_IMU_INT_2);
 #elif SECOND_IMU == IMU_BNO055
-                    m_Sensor2 = new BNO055Sensor(1, secondIMUAddress, SECOND_IMU_ROTATION);
+                    m_Sensor2 = new BNO055Sensor(sensorID, secondIMUAddress, SECOND_IMU_ROTATION);
 #elif SECOND_IMU == IMU_MPU9250
-                    m_Sensor2 = new MPU9250Sensor(1, secondIMUAddress, SECOND_IMU_ROTATION);
+                    m_Sensor2 = new MPU9250Sensor(sensorID, secondIMUAddress, SECOND_IMU_ROTATION);
 #elif SECOND_IMU == IMU_BMI160
-                    m_Sensor2 = new BMI160Sensor(1, secondIMUAddress, SECOND_IMU_ROTATION);
+                    m_Sensor2 = new BMI160Sensor(sensorID, secondIMUAddress, SECOND_IMU_ROTATION);
 #elif SECOND_IMU == IMU_MPU6500 || SECOND_IMU == IMU_MPU6050
-                    m_Sensor2 = new MPU6050Sensor(1, SECOND_IMU, secondIMUAddress, SECOND_IMU_ROTATION);
+                    m_Sensor2 = new MPU6050Sensor(sensorID, SECOND_IMU, secondIMUAddress, SECOND_IMU_ROTATION);
 #elif SECOND_IMU == IMU_ICM20948
-                    m_Sensor2 = new ICM20948Sensor(1, secondIMUAddress, SECOND_IMU_ROTATION);
+                    m_Sensor2 = new ICM20948Sensor(sensorID, secondIMUAddress, SECOND_IMU_ROTATION);
 #endif
                 }
 

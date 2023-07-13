@@ -23,15 +23,12 @@
 
 #include "Wire.h"
 #include "ota.h"
-#include "sensors/SensorManager.h"
-#include "configuration/Configuration.h"
+#include "GlobalVars.h"
 #include "network/network.h"
 #include "globals.h"
 #include "credentials.h"
 #include <i2cscan.h>
 #include "serial/serialcommands.h"
-#include "LEDManager.h"
-#include "status/StatusManager.h"
 #include "batterymonitor.h"
 #include "logging/Logger.h"
 
@@ -40,6 +37,7 @@ SlimeVR::Sensors::SensorManager sensorManager;
 SlimeVR::LEDManager ledManager(LED_PIN);
 SlimeVR::Status::StatusManager statusManager;
 SlimeVR::Configuration::Configuration configuration;
+Timer<> globalTimer;
 
 int sensorToCalibrate = -1;
 bool blinking = false;
@@ -52,6 +50,7 @@ BatteryMonitor battery;
 void setup()
 {
     Serial.begin(serialBaudRate);
+    globalTimer = timer_create_default();
 
 #ifdef ESP32C3 
     // Wait for the Computer to be able to connect.
@@ -71,7 +70,7 @@ void setup()
 
     SerialCommands::setUp();
 
-#if IMU == IMU_MPU6500 || IMU == IMU_MPU6050 || IMU == IMU_MPU9250 || IMU == IMU_BNO055 || IMU == IMU_ICM20948
+#if IMU == IMU_MPU6500 || IMU == IMU_MPU6050 || IMU == IMU_MPU9250 || IMU == IMU_BNO055 || IMU == IMU_ICM20948 || IMU == IMU_BMI160
     I2CSCAN::clearBus(PIN_IMU_SDA, PIN_IMU_SCL); // Make sure the bus isn't stuck when resetting ESP without powering it down
     // Fixes I2C issues for certain IMUs. Only has been tested on IMUs above. Testing advised when adding other IMUs.
 #endif
@@ -111,6 +110,7 @@ void setup()
 
 void loop()
 {
+    globalTimer.tick();
     SerialCommands::update();
     OTA::otaUpdate();
     Network::update(sensorManager.getFirst(), sensorManager.getSecond(), sensorManager.getN3(), sensorManager.getN4(), sensorManager.getN5(), sensorManager.getN6(), sensorManager.getN7(), sensorManager.getN8(), sensorManager.getN9(), sensorManager.getN10(), sensorManager.getN11());
