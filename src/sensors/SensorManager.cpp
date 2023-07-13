@@ -54,7 +54,7 @@ namespace SlimeVR
             uint8_t n10IMUAddress = 0;
             uint8_t n11IMUAddress = 0;
 
-            bool sharedIMUAddresses = (PRIMARY_IMU_ADDRESS_ONE == SECONDARY_IMU_ADDRESS_ONE && PRIMARY_IMU_ADDRESS_TWO == SECONDARY_IMU_ADDRESS_TWO);
+            // bool sharedIMUAddresses = (PRIMARY_IMU_ADDRESS_ONE == SECONDARY_IMU_ADDRESS_ONE && PRIMARY_IMU_ADDRESS_TWO == SECONDARY_IMU_ADDRESS_TWO);
             {
                 Multiplexer::setTCAChannel(0);
 #if IMU == IMU_BNO080 || IMU == IMU_BNO085 || IMU == IMU_BNO086
@@ -69,14 +69,14 @@ namespace SlimeVR
 
                 if (!I2CSCAN::isI2CExist(firstIMUAddress))
                 {
-                    m_Sensor1 = new ErroneousSensor(sensorID, IMU);
+                    m_Sensor1 = new ErroneousSensor(0, IMU);
                 }
                 else
                 {
                     m_Logger.trace("Primary IMU found at address 0x%02X", firstIMUAddress);
 
 #if IMU == IMU_BNO080 || IMU == IMU_BNO085 || IMU == IMU_BNO086
-                    m_Sensor1 = new BNO080Sensor(sensorID, IMU, firstIMUAddress, IMU_ROTATION, PIN_IMU_INT);
+                    m_Sensor1 = new BNO080Sensor(0, IMU, firstIMUAddress, IMU_ROTATION, PIN_IMU_INT);
 #elif IMU == IMU_BNO055
                     m_Sensor1 = new BNO055Sensor(sensorID, firstIMUAddress, IMU_ROTATION);
 #elif IMU == IMU_MPU9250
@@ -110,14 +110,14 @@ namespace SlimeVR
                 }
                 else if (!I2CSCAN::isI2CExist(secondIMUAddress))
                 {
-                    m_Sensor2 = new ErroneousSensor(sensorID, SECOND_IMU);
+                    m_Sensor2 = new ErroneousSensor(1, SECOND_IMU);
                 }
                 else
                 {
                     m_Logger.trace("Secondary IMU found at address 0x%02X", secondIMUAddress);
 
 #if SECOND_IMU == IMU_BNO080 || SECOND_IMU == IMU_BNO085 || SECOND_IMU == IMU_BNO086
-                    m_Sensor2 = new BNO080Sensor(sensorID, SECOND_IMU, secondIMUAddress, SECOND_IMU_ROTATION, PIN_IMU_INT_2);
+                    m_Sensor2 = new BNO080Sensor(1, SECOND_IMU, secondIMUAddress, SECOND_IMU_ROTATION, PIN_IMU_INT_2);
 #elif SECOND_IMU == IMU_BNO055
                     m_Sensor2 = new BNO055Sensor(sensorID, secondIMUAddress, SECOND_IMU_ROTATION);
 #elif SECOND_IMU == IMU_MPU9250
@@ -135,7 +135,6 @@ namespace SlimeVR
             }
             Multiplexer::setTCAChannel(1);
             {
-
                 // IMU 3
                 n3IMUAddress = 0x4A; // BNO Address 1
                 if (!I2CSCAN::isI2CExist(n3IMUAddress))
