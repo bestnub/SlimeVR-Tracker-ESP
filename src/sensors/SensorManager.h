@@ -37,11 +37,20 @@ namespace SlimeVR
         {
         public:
             SensorManager()
-                : m_Logger(SlimeVR::Logging::Logger("SensorManager")), m_Sensor1(new EmptySensor(0)), m_Sensor2(new EmptySensor(0)) {}
+                : m_Logger(SlimeVR::Logging::Logger("SensorManager")), m_Sensor1(new EmptySensor(0)), m_Sensor2(new EmptySensor(0)), m_Sensor3(new EmptySensor(0)), m_Sensor4(new EmptySensor(0)), m_Sensor5(new EmptySensor(0)), m_Sensor6(new EmptySensor(0)), m_Sensor7(new EmptySensor(0)), m_Sensor8(new EmptySensor(0)), m_Sensor9(new EmptySensor(0)), m_Sensor10(new EmptySensor(0)), m_Sensor11(new EmptySensor(0)) {}
             ~SensorManager()
             {
                 delete m_Sensor1;
                 delete m_Sensor2;
+                delete m_Sensor3;
+                delete m_Sensor4;
+                delete m_Sensor5;
+                delete m_Sensor6;
+                delete m_Sensor7;
+                delete m_Sensor8;
+                delete m_Sensor9;
+                delete m_Sensor10;
+                delete m_Sensor11;
             }
 
             void setup();
@@ -51,12 +60,30 @@ namespace SlimeVR
 
             Sensor *getFirst() { return m_Sensor1; };
             Sensor *getSecond() { return m_Sensor2; };
+            Sensor *getN3() { return m_Sensor3; };
+            Sensor *getN4() { return m_Sensor4; };
+            Sensor *getN5() { return m_Sensor5; };
+            Sensor *getN6() { return m_Sensor6; };
+            Sensor *getN7() { return m_Sensor7; };
+            Sensor *getN8() { return m_Sensor8; };
+            Sensor *getN9() { return m_Sensor9; };
+            Sensor *getN10() { return m_Sensor10; };
+            Sensor *getN11() { return m_Sensor11; };
 
         private:
             SlimeVR::Logging::Logger m_Logger;
 
             Sensor *m_Sensor1;
             Sensor *m_Sensor2;
+            Sensor *m_Sensor3;
+            Sensor *m_Sensor4;
+            Sensor *m_Sensor5;
+            Sensor *m_Sensor6;
+            Sensor *m_Sensor7;
+            Sensor *m_Sensor8;
+            Sensor *m_Sensor9;
+            Sensor *m_Sensor10;
+            Sensor *m_Sensor11;
         };
     }
 }

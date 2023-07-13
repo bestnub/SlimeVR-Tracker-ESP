@@ -42,6 +42,15 @@ bool connected = false;
 
 uint8_t sensorStateNotified1 = 0;
 uint8_t sensorStateNotified2 = 0;
+uint8_t sensorStateNotified3 = 0;
+uint8_t sensorStateNotified4 = 0;
+uint8_t sensorStateNotified5 = 0;
+uint8_t sensorStateNotified6 = 0;
+uint8_t sensorStateNotified7 = 0;
+uint8_t sensorStateNotified8 = 0;
+uint8_t sensorStateNotified9 = 0;
+uint8_t sensorStateNotified10 = 0;
+uint8_t sensorStateNotified11 = 0;
 unsigned long lastSensorInfoPacket = 0;
 
 uint8_t serialBuffer[128];
@@ -562,6 +571,34 @@ void updateSensorState(Sensor * const sensor, Sensor * const sensor2) {
     }
 }
 
+void updateSensorState(Sensor * const sensor, Sensor * const sensor2, Sensor * const sensor3, Sensor * const sensor4, Sensor * const sensor5, Sensor * const sensor6, Sensor * const sensor7, Sensor * const sensor8, Sensor * const sensor9, Sensor * const sensor10, Sensor * const sensor11) {
+    if(millis() - lastSensorInfoPacket > 1000) {
+        lastSensorInfoPacket = millis();
+        if(sensorStateNotified1 != sensor->getSensorState())
+            Network::sendSensorInfo(sensor);
+        if(sensorStateNotified2 != sensor2->getSensorState())
+            Network::sendSensorInfo(sensor2);
+        if(sensorStateNotified2 != sensor3->getSensorState())
+            Network::sendSensorInfo(sensor3);
+        if(sensorStateNotified2 != sensor4->getSensorState())
+            Network::sendSensorInfo(sensor4);
+        if(sensorStateNotified2 != sensor5->getSensorState())
+            Network::sendSensorInfo(sensor5);
+        if(sensorStateNotified2 != sensor6->getSensorState())
+            Network::sendSensorInfo(sensor6);
+        if(sensorStateNotified2 != sensor7->getSensorState())
+            Network::sendSensorInfo(sensor7);
+        if(sensorStateNotified2 != sensor8->getSensorState())
+            Network::sendSensorInfo(sensor8);
+        if(sensorStateNotified2 != sensor9->getSensorState())
+            Network::sendSensorInfo(sensor9);
+        if(sensorStateNotified2 != sensor10->getSensorState())
+            Network::sendSensorInfo(sensor10);
+        if(sensorStateNotified2 != sensor11->getSensorState())
+            Network::sendSensorInfo(sensor11);
+    }
+}
+
 bool ServerConnection::isConnected() {
     return connected;
 }
@@ -625,7 +662,7 @@ void ServerConnection::resetConnection() {
     statusManager.setStatus(SlimeVR::Status::SERVER_CONNECTING, true);
 }
 
-void ServerConnection::update(Sensor * const sensor, Sensor * const sensor2) {
+void ServerConnection::update(Sensor * const sensor, Sensor * const sensor2, Sensor * const sensor3, Sensor * const sensor4, Sensor * const sensor5, Sensor * const sensor6, Sensor * const sensor7, Sensor * const sensor8, Sensor * const sensor9, Sensor * const sensor10, Sensor * const sensor11) {
     if(connected) {
         int packetSize = Udp.parsePacket();
         if (packetSize)
@@ -690,7 +727,13 @@ void ServerConnection::update(Sensor * const sensor, Sensor * const sensor2) {
         
     if(!connected) {
         connect();
-    } else if(sensorStateNotified1 != sensor->isWorking() || sensorStateNotified2 != sensor2->isWorking()) {
-        updateSensorState(sensor, sensor2);
+    } else if(sensorStateNotified1 != sensor->isWorking() || sensorStateNotified2 != sensor2->isWorking() 
+    || sensorStateNotified3 != sensor3->isWorking() || sensorStateNotified4 != sensor4->isWorking() 
+    || sensorStateNotified5 != sensor5->isWorking() || sensorStateNotified6 != sensor6->isWorking() 
+    || sensorStateNotified7 != sensor7->isWorking() || sensorStateNotified8 != sensor8->isWorking() 
+    || sensorStateNotified9 != sensor9->isWorking() || sensorStateNotified10 != sensor10->isWorking()
+    || sensorStateNotified11 != sensor11->isWorking()) {
+        // updateSensorState(sensor, sensor2);
+        updateSensorState(sensor, sensor2, sensor3, sensor4, sensor5, sensor6, sensor7, sensor8, sensor9, sensor10, sensor11);
     }
 }
