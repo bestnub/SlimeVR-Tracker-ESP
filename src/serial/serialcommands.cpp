@@ -68,6 +68,7 @@ namespace SerialCommands {
         );
         Sensor* sensor1 = sensorManager.getFirst();
         Sensor* sensor2 = sensorManager.getSecond();
+        Sensor* sensor3 = sensorManager.getN3();
         logger.info(
             "Sensor 1: %s (%.3f %.3f %.3f %.3f) is working: %s, had data: %s",
             getIMUNameByType(sensor1->getSensorType()),
@@ -81,6 +82,13 @@ namespace SerialCommands {
             UNPACK_QUATERNION(sensor2->getFusedRotation()),
             sensor2->isWorking() ? "true" : "false",
             sensor2->hadData ? "true" : "false"
+        );
+        logger.info(
+            "Sensor 3: %s (%.3f %.3f %.3f %.3f) is working: %s, had data: %s",
+            getIMUNameByType(sensor3->getSensorType()),
+            UNPACK_QUATERNION(sensor3->getFusedRotation()),
+            sensor3->isWorking() ? "true" : "false",
+            sensor3->hadData ? "true" : "false"
         );
     }
 
