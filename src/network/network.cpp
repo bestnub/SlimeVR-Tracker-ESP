@@ -28,14 +28,14 @@ void Network::setUp() {
     WiFiNetwork::setUp();
 }
 
-void Network::update(Sensor * const sensor, Sensor * const sensor2, Sensor * const sensor3, Sensor * const sensor4, Sensor * const sensor5, Sensor * const sensor6, Sensor * const sensor7, Sensor * const sensor8, Sensor * const sensor9, Sensor * const sensor10, Sensor * const sensor11) {
+void Network::update(Sensor * const sensor, Sensor * const sensor2, Sensor * const sensor3) { // , Sensor * const sensor4, Sensor * const sensor5, Sensor * const sensor6, Sensor * const sensor7, Sensor * const sensor8, Sensor * const sensor9, Sensor * const sensor10, Sensor * const sensor11
     WiFiNetwork::upkeep();
     if(WiFiNetwork::isConnected()) {
         if(lastWifiConnected == false) {
             lastWifiConnected = true;
             ServerConnection::resetConnection(); // WiFi was reconnected, reconnect to the server
         }
-        ServerConnection::update(sensor, sensor2, sensor3, sensor4, sensor5, sensor6, sensor7, sensor8, sensor9, sensor10, sensor11);
+        ServerConnection::update(sensor, sensor2, sensor3); // , sensor4, sensor5, sensor6, sensor7, sensor8, sensor9, sensor10, sensor11
     } else {
         lastWifiConnected = false;
     }
