@@ -144,7 +144,7 @@ namespace SlimeVR
                 else
                 {
                     // Id, IMU, IMU Address, Rotation, Int Pin
-                    m_Sensor3 = new BNO080Sensor(2, IMU_BNO085, n3IMUAddress, DEG_0, 24);
+                    m_Sensor3 = new BNO080Sensor(2, IMU_BNO086, n3IMUAddress, DEG_0, 24);
                     m_Logger.trace("IMU 3 found at address 0x%02X", n3IMUAddress);
                 }
                 m_Sensor3->motionSetup();
@@ -159,7 +159,7 @@ namespace SlimeVR
             //     else
             //     {
             //         // Id, IMU, IMU Address, Rotation, Int Pin
-            //         m_Sensor4 = new BNO080Sensor(3, IMU_BNO085, n4IMUAddress, DEG_0, 24);
+            //         m_Sensor4 = new BNO080Sensor(3, IMU_BNO086, n4IMUAddress, DEG_0, 24);
             //         m_Logger.trace("IMU 4 found at address 0x%02X", n4IMUAddress);
             //     }
             //     m_Sensor4->motionSetup();
@@ -175,7 +175,7 @@ namespace SlimeVR
             //     else
             //     {
             //         // Id, IMU, IMU Address, Rotation, Int Pin
-            //         m_Sensor5 = new BNO080Sensor(4, IMU_BNO085, n5IMUAddress, DEG_0, 24);
+            //         m_Sensor5 = new BNO080Sensor(4, IMU_BNO086, n5IMUAddress, DEG_0, 24);
             //         m_Logger.trace("IMU 5 found at address 0x%02X", n5IMUAddress);
             //     }
             //     m_Sensor5->motionSetup();
@@ -190,7 +190,7 @@ namespace SlimeVR
             //     else
             //     {
             //         // Id, IMU, IMU Address, Rotation, Int Pin
-            //         m_Sensor6 = new BNO080Sensor(5, IMU_BNO085, n6IMUAddress, DEG_0, 24);
+            //         m_Sensor6 = new BNO080Sensor(5, IMU_BNO086, n6IMUAddress, DEG_0, 24);
             //         m_Logger.trace("IMU 6 found at address 0x%02X", n6IMUAddress);
             //     }
             //     m_Sensor6->motionSetup();
@@ -206,7 +206,7 @@ namespace SlimeVR
             //     else
             //     {
             //         // Id, IMU, IMU Address, Rotation, Int Pin
-            //         m_Sensor7 = new BNO080Sensor(6, IMU_BNO085, n7IMUAddress, DEG_0, 24);
+            //         m_Sensor7 = new BNO080Sensor(6, IMU_BNO086, n7IMUAddress, DEG_0, 24);
             //         m_Logger.trace("IMU 7 found at address 0x%02X", n7IMUAddress);
             //     }
             //     m_Sensor7->motionSetup();
@@ -221,7 +221,7 @@ namespace SlimeVR
             //     else
             //     {
             //         // Id, IMU, IMU Address, Rotation, Int Pin
-            //         m_Sensor8 = new BNO080Sensor(7, IMU_BNO085, n8IMUAddress, DEG_0, 24);
+            //         m_Sensor8 = new BNO080Sensor(7, IMU_BNO086, n8IMUAddress, DEG_0, 24);
             //         m_Logger.trace("IMU 8 found at address 0x%02X", n8IMUAddress);
             //     }
             //     m_Sensor8->motionSetup();
@@ -237,7 +237,7 @@ namespace SlimeVR
             //     else
             //     {
             //         // Id, IMU, IMU Address, Rotation, Int Pin
-            //         m_Sensor9 = new BNO080Sensor(8, IMU_BNO085, n9IMUAddress, DEG_0, 24);
+            //         m_Sensor9 = new BNO080Sensor(8, IMU_BNO086, n9IMUAddress, DEG_0, 24);
             //         m_Logger.trace("IMU 9 found at address 0x%02X", n9IMUAddress);
             //     }
             //     m_Sensor9->motionSetup();
@@ -252,7 +252,7 @@ namespace SlimeVR
             //     else
             //     {
             //         // Id, IMU, IMU Address, Rotation, Int Pin
-            //         m_Sensor10 = new BNO080Sensor(9, IMU_BNO085, n10IMUAddress, DEG_0, 24);
+            //         m_Sensor10 = new BNO080Sensor(9, IMU_BNO086, n10IMUAddress, DEG_0, 24);
             //         m_Logger.trace("IMU 10 found at address 0x%02X", n10IMUAddress);
             //     }
             //     m_Sensor10->motionSetup();
@@ -268,7 +268,7 @@ namespace SlimeVR
             //     else
             //     {
             //         // Id, IMU, IMU Address, Rotation, Int Pin
-            //         m_Sensor11 = new BNO080Sensor(10, IMU_BNO085, n11IMUAddress, DEG_0, 24);
+            //         m_Sensor11 = new BNO080Sensor(10, IMU_BNO086, n11IMUAddress, DEG_0, 24);
             //         m_Logger.trace("IMU 11 found at address 0x%02X", n11IMUAddress);
             //     }
             //     m_Sensor11->motionSetup();
