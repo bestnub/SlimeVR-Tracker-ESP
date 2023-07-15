@@ -11,6 +11,6 @@ namespace Multiplexer
     /*!
      *  @brief Set Multiplexer Channel
      */
-    void setTCAChannel(byte i);
+    void setTCAChannel(int i);
 }
 #endif

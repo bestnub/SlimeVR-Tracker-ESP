@@ -18,9 +18,18 @@ void Multiplexer::setup()
     setTCAChannel(TCA9548A_CHANNEL_0);
 }
 
-void Multiplexer::setTCAChannel(byte i)
-{
-    Wire.beginTransmission(TCA9548A_I2C_ADDRESS);
-    Wire.write(1 << i);
-    Wire.endTransmission();
+// void Multiplexer::setTCAChannel(byte i)
+// {
+//     Wire.beginTransmission(TCA9548A_I2C_ADDRESS);
+//     Wire.write(1 << i);
+//     Wire.endTransmission();
+// }
+
+void Multiplexer::setTCAChannel(int i) {
+  uint8_t channelBits = 1 << i;
+  
+  Wire.beginTransmission(0x70);  // TCA9548A I2C address
+  Wire.write(channelBits);       // Write the control byte (channel selection)
+  Wire.endTransmission();
 }
+

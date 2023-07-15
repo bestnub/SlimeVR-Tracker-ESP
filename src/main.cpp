@@ -23,8 +23,8 @@
 
 #include <i2cscan.h>
 #include "GlobalVars.h"
-#include "Multiplexer.cpp"
-#include "Multiplexer.h"
+#include "multiplexer/Multiplexer.h"
+#include "multiplexer/Multiplexer.h"
 #include "Wire.h"
 #include "batterymonitor.h"
 #include "credentials.h"
@@ -115,7 +115,7 @@ void loop()
     globalTimer.tick();
     SerialCommands::update();
     OTA::otaUpdate();
-    Network::update(sensorManager.getFirst(), sensorManager.getSecond(), sensorManager.getN3(), sensorManager.getN4(), sensorManager.getN5(), sensorManager.getN6(), sensorManager.getN7(), sensorManager.getN8(), sensorManager.getN9(), sensorManager.getN10(), sensorManager.getN11());
+    Network::update(sensorManager.getFirst(), sensorManager.getSecond(), sensorManager.getN3()); // , sensorManager.getN4(), sensorManager.getN5(), sensorManager.getN6(), sensorManager.getN7(), sensorManager.getN8(), sensorManager.getN9(), sensorManager.getN10(), sensorManager.getN11()
     sensorManager.update();
     battery.Loop();
     ledManager.update();
