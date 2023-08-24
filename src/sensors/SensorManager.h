@@ -1,91 +1,109 @@
 /*
-    SlimeVR Code is placed under the MIT license
-    Copyright (c) 2022 TheDevMinerTV
+	SlimeVR Code is placed under the MIT license
+	Copyright (c) 2022 TheDevMinerTV
 
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-    of this software and associated documentation files (the "Software"), to deal
-    in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
+	Permission is hereby granted, free of charge, to any person obtaining a copy
+	of this software and associated documentation files (the "Software"), to deal
+	in the Software without restriction, including without limitation the rights
+	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	copies of the Software, and to permit persons to whom the Software is
+	furnished to do so, subject to the following conditions:
 
-    The above copyright notice and this permission notice shall be included in
-    all copies or substantial portions of the Software.
+	The above copyright notice and this permission notice shall be included in
+	all copies or substantial portions of the Software.
 
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-    THE SOFTWARE.
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+	THE SOFTWARE.
 */
 
 #ifndef SLIMEVR_SENSORMANAGER
 #define SLIMEVR_SENSORMANAGER
 
-#include "globals.h"
-#include "sensor.h"
 #include "EmptySensor.h"
+#include "globals.h"
 #include "logging/Logger.h"
+#include "sensor.h"
 
-namespace SlimeVR
-{
-    namespace Sensors
-    {
-        class SensorManager
-        {
-        public:
-            SensorManager()
-                : m_Logger(SlimeVR::Logging::Logger("SensorManager")), m_Sensor1(new EmptySensor(0)), m_Sensor2(new EmptySensor(0)), m_Sensor3(new EmptySensor(0)) {}
-            ~SensorManager()
-            {
-                delete m_Sensor1;
-                delete m_Sensor2;
-                delete m_Sensor3;
-                // delete m_Sensor4;
-                // delete m_Sensor5;
-                // delete m_Sensor6;
-                // delete m_Sensor7;
-                // delete m_Sensor8;
-                // delete m_Sensor9;
-                // delete m_Sensor10;
-                // delete m_Sensor11;
-            }
+namespace SlimeVR {
+namespace Sensors {
+class SensorManager {
+public:
+	SensorManager()
+		: m_Logger(SlimeVR::Logging::Logger("SensorManager"))
+		, m_Sensor1(new EmptySensor(0))
+		, m_Sensor2(new EmptySensor(0))
+		, m_Sensor3(new EmptySensor(0)) {}
+	~SensorManager() {
+		delete m_Sensor1;
+		delete m_Sensor2;
+		delete m_Sensor3;
+		// delete m_Sensor4;
+		// delete m_Sensor5;
+		// delete m_Sensor6;
+		// delete m_Sensor7;
+		// delete m_Sensor8;
+		// delete m_Sensor9;
+		// delete m_Sensor10;
+		// delete m_Sensor11;
+	}
 
-            void setup();
-            void postSetup();
+	void setup();
+	void postSetup();
 
-            void update();
+	void update();
 
-            Sensor *getFirst() { return m_Sensor1; };
-            Sensor *getSecond() { return m_Sensor2; };
-            Sensor *getN3() { return m_Sensor3; };
-            // Sensor *getN4() { return m_Sensor4; };
-            // Sensor *getN5() { return m_Sensor5; };
-            // Sensor *getN6() { return m_Sensor6; };
-            // Sensor *getN7() { return m_Sensor7; };
-            // Sensor *getN8() { return m_Sensor8; };
-            // Sensor *getN9() { return m_Sensor9; };
-            // Sensor *getN10() { return m_Sensor10; };
-            // Sensor *getN11() { return m_Sensor11; };
+	void update_sendData();
 
-        private:
-            SlimeVR::Logging::Logger m_Logger;
+	Sensor* getFirst() { return m_Sensor1; };
+	Sensor* getSecond() { return m_Sensor2; };
+	Sensor* getN3() { return m_Sensor3; };
+	// Sensor *getN4() { return m_Sensor4; };
+	// Sensor *getN5() { return m_Sensor5; };
+	// Sensor *getN6() { return m_Sensor6; };
+	// Sensor *getN7() { return m_Sensor7; };
+	// Sensor *getN8() { return m_Sensor8; };
+	// Sensor *getN9() { return m_Sensor9; };
+	// Sensor *getN10() { return m_Sensor10; };
+	// Sensor *getN11() { return m_Sensor11; };
 
-            Sensor *m_Sensor1;
-            Sensor *m_Sensor2;
-            Sensor *m_Sensor3;
-            // Sensor *m_Sensor4;
-            // Sensor *m_Sensor5;
-            // Sensor *m_Sensor6;
-            // Sensor *m_Sensor7;
-            // Sensor *m_Sensor8;
-            // Sensor *m_Sensor9;
-            // Sensor *m_Sensor10;
-            // Sensor *m_Sensor11;
-        };
-    }
-}
+	void runTask() {
+		xTaskCreatePinnedToCore(
+			&SensorManager::taskFunctionWrapper,  // Verweisen Sie auf den Wrapper
+			"Task1",
+			4096,
+			this,
+			1,
+			NULL,
+			1
+		);
+	}
 
-#endif // SLIMEVR_SENSORFACTORY_H_
+private:
+	SlimeVR::Logging::Logger m_Logger;
+
+	Sensor* m_Sensor1;
+	Sensor* m_Sensor2;
+	Sensor* m_Sensor3;
+	// Sensor *m_Sensor4;
+	// Sensor *m_Sensor5;
+	// Sensor *m_Sensor6;
+	// Sensor *m_Sensor7;
+	// Sensor *m_Sensor8;
+	// Sensor *m_Sensor9;
+	// Sensor *m_Sensor10;
+	// Sensor *m_Sensor11;
+
+	static void taskFunctionWrapper(void* pvParameters) {
+		SensorManager* sensorManager = static_cast<SensorManager*>(pvParameters);
+		sensorManager->update_sendData();
+	}
+};
+}  // namespace Sensors
+}  // namespace SlimeVR
+
+#endif  // SLIMEVR_SENSORFACTORY_H_

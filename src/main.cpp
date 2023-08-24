@@ -34,6 +34,10 @@
 #include "ota.h"
 #include "serial/serialcommands.h"
 
+#include <stdio.h>
+#include <freertos/FreeRTOS.h>
+#include <freertos/task.h>
+
 SlimeVR::Logging::Logger logger("SlimeVR");
 SlimeVR::Sensors::SensorManager sensorManager;
 SlimeVR::LEDManager ledManager(LED_PIN);
@@ -117,6 +121,7 @@ void loop()
     OTA::otaUpdate();
     Network::update(sensorManager.getFirst(), sensorManager.getSecond(), sensorManager.getN3()); // , sensorManager.getN4(), sensorManager.getN5(), sensorManager.getN6(), sensorManager.getN7(), sensorManager.getN8(), sensorManager.getN9(), sensorManager.getN10(), sensorManager.getN11()
     sensorManager.update();
+    sensorManager.runTask();
     battery.Loop();
     ledManager.update();
 #ifdef TARGET_LOOPTIME_MICROS
